@@ -1,63 +1,24 @@
-require("dotenv").config();
-const express = require("express");
-const helmet = require("helmet");
-const morgan = require("morgan");
+const app = require('./api/index')
 const cors = require("cors");
-const rateLimit = require("express-rate-limit");
-const mysql = require('mysql');
-const app = express();
 
-// Middleware
-app.use(express.json());
-app.use(helmet());  //Helmet sets various HTTP security headers that protect your app from known web vulnerabilities. Helmet = HTTP firewall for headers
-app.use(cors({ origin: process.env.CLIENT_URL 
-    ||
-     "*" ,   //never do this 
-     credentials:true}));
-app.use(morgan("dev"));  //Logs incoming HTTP requests to the terminal.
-// app.use(express.json());
+// app.options("*", cors({ origin: 'http://localhost:8000', optionsSuccessStatus: 200 }));
 
-
-const db = mysql.createConnection({
-    host: process.env.host,
-    user: process.env.user,
-    port:3306,
-    password: process.env.password,
-    database: process.env.database
+// app.use(cors({ origin: "http://localhost:8000", optionsSuccessStatus: 200 }))
+app.use(cors())
+// // connecting the server and frontend
+app.all('*', (req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    next();
 });
 
-db.connect((err) => {
-  if (err) throw err;
-  console.log("MySQL connected...");
-});
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100,
-  message: "Too many requests from this IP, try again later.",
-});
-app.use(limiter);  //Helps protect your API from DDoS attacks, brute force login attempts, and API abuse.
-
-// Routes
-const routes = require("./mainroutes.js");
-app.use("/api/v1", routes);
-
-// 404 Handler
-app.use((req, res) => {
-  res.status(404).json({ message: "Route not found" });
-});
-
-// Global Error Handler
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  const status = err.status || 500;
-  const message = process.env.NODE_ENV === 'production'
-    ? "Something went wrong"
-    : err.message;
-  res.status(status).json({ error: message });
-});
+app.use((req, res, next) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Content-Allow-Orgin', 'https://www.minatofoundation.org/')
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH,DELTE')
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    response.head("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next()
+})
 
 
-// Start Server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+module.exports = app

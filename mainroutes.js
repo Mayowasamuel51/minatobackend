@@ -4,7 +4,7 @@ const {application_logic } = require('./contoller.js')
 
 
 
-router.post('/',application_logic)
+router.post('/', application_logic)
 
 
 
