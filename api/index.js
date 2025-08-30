@@ -6,15 +6,17 @@ const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 const mysql = require('mysql');
 const app = express();
+const bodyParser = require('body-parser');
 
 // Middleware
 app.use(express.json());
 app.use(helmet());  //Helmet sets various HTTP security headers that protect your app from known web vulnerabilities. Helmet = HTTP firewall for headers
-app.use(cors({ origin: process.env.CLIENT_URL 
-    ||
-     "*" ,   //never do this 
-     credentials:true}));
-app.use(morgan("dev"));  //Logs incoming HTTP requests to the terminal.
+// app.use(cors({ origin: process.env.CLIENT_URL 
+//     ||
+//      "*" ,   //never do this 
+//      credentials:true}));
+// app.use(morgan("dev"));  //Logs incoming HTTP requests to the terminal.
+app.use(cors({ origin: "*", credentials: true }));
 // app.use(express.json());
 
 
