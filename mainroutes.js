@@ -5,7 +5,7 @@ const {login} = require('./adminController.js')
 
 router.post('/submit-form', application_logic)
 router.post('/admin', login)
-router.get('/',get_all_information)
+router.get('/applications',get_all_information)
 
 
 module.exports = router;

@@ -65,7 +65,6 @@ exports.application_logic = (req, res) => {
 // ✅ New function: Get all applications
 exports.get_all_information = (req, res) => {
     const query = `SELECT * FROM application `; // Latest first
-
     db.query(query, (err, results) => {
         if (err) {
             console.error("Database error:", err);

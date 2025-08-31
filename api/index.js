@@ -16,6 +16,8 @@ app.use(helmet());  //Helmet sets various HTTP security headers that protect you
 //      "*" ,   //never do this 
 //      credentials:true}));
 // app.use(morgan("dev"));  //Logs incoming HTTP requests to the terminal.
+// const cors = require("cors");
+// app.use(cors());
 app.use(cors({ origin: "*", credentials: true }));
 // app.use(express.json());
 
