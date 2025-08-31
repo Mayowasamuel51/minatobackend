@@ -8,17 +8,18 @@ const db = mysql.createConnection({
     database: process.env.database
 });
 
+// Insert application logic
 exports.application_logic = (req, res) => {
     const { fullname, email, description, location, age } = req.body;
-//    const { fullname, email, description, location, age } = req.body;
     const pdf = null;
     const image = null;
-    // Validate text fields
+
+    // Validate fields
     if (!fullname || !location || !age || !email || !description) {
         return res.status(400).json({ success: false, message: "All fields are required" });
     }
 
-    // Step 1: Check if email exists
+    // Check if email exists
     const checkEmailQuery = `SELECT email FROM application WHERE email = ?`;
 
     db.query(checkEmailQuery, [email], (err, results) => {
@@ -28,11 +29,10 @@ exports.application_logic = (req, res) => {
         }
 
         if (results.length > 0) {
-            // Email already exists
             return res.status(400).json({ success: false, message: "Email already exists" });
         }
 
-        // Step 2: Insert new record
+        // Insert record
         const insertQuery = `
             INSERT INTO application (fullname, email, pdf_link, description, image, location, age)
             VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -58,6 +58,25 @@ exports.application_logic = (req, res) => {
                     age
                 }
             });
+        });
+    });
+};
+
+// ✅ New function: Get all applications
+exports.get_all_information = (req, res) => {
+    const query = `SELECT * FROM application `; // Latest first
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error("Database error:", err);
+            return res.status(500).json({ success: false, message: "Database fetch failed" });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Applications retrieved successfully",
+            count: results.length,
+            data: results
         });
     });
 };
