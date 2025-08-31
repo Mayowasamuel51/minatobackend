@@ -3,7 +3,7 @@ const cors = require("cors");
 
 
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:3000'], // allowed origins
+    origin: ['http://localhost:5173', 'http://localhost:3000','https://minatoadminadminpage.vercel.app'], // allowed origins
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
